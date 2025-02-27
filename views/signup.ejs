@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signup Page</title>
+    <%- include('./partials/head') %>
+  </head>
+  <body>
+    <%- include('./partials/navbar') %>
+    <div class="container p-6 row mx-auto">
+      <h1 class="text-center">Signup Page</h1>
+      <form
+        action="/user/signup"
+        method="post"
+        class="col-10 col-sm-6 col-md-10 mx-auto"
+      >
+        <div class="mb-3">
+          <label for="fullName" class="form-label">Fullname</label>
+          <input
+            name="fullName"
+            type="text"
+            class="form-control"
+            id="exampleInputPassword1"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email address</label>
+          <input
+            name="email"
+            type="email"
+            class="form-control"
+            id="exampleInputEmail1"
+            aria-describedby="emailHelp"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input
+            name="password"
+            type="password"
+            class="form-control"
+            id="exampleInputPassword1"
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+    <%- include('./partials/scripts') %>
+  </body>
+</html>
