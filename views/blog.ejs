@@ -12,12 +12,10 @@
       rel="stylesheet"
     />
     <style>
-      /* Made by Himesh Premji */
-      /* Made by 22Hems on INSTAGRAM */
       body {
         background-color: #f8f9fa;
       }
-      .blog-container {
+      .post-container {
         max-width: 1100px;
         margin: auto;
         background: white;
@@ -25,18 +23,18 @@
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       }
-      .blog-title {
+      .post-title {
         text-align: center;
         color: #343a40;
       }
-      .blog-image {
+      .post-image {
         width: 100%;
         height: auto;
         border-radius: 8px;
         margin-bottom: 20px;
       }
-      .blog-author,
-      .blog-body {
+      .post-author,
+      .post-content {
         font-family: 'Lora', serif;
         background: #f4f4f4;
         padding: 15px;
@@ -46,10 +44,10 @@
         font-size: 16px;
         line-height: 1.5;
       }
-      .blog-author {
+      .post-author {
         font-family: Arial, Helvetica, sans-serif;
       }
-      .blog-author {
+      .post-author {
         display: flex;
         align-items: center;
         justify-content: flex-end;
@@ -59,7 +57,7 @@
         color: #333;
       }
 
-      .blog-author img {
+      .post-author img {
         width: 35px;
         height: 35px;
         border-radius: 50%;
@@ -68,30 +66,109 @@
         padding: 2px;
       }
 
-      .blog-author span {
+      .post-author span {
         font-weight: 600;
         color: #444;
+      }
+
+      /* Comment Section */
+      .comment-container {
+        max-width: 1100px;
+      }
+      .comment-input-field label {
+        white-space: nowrap;
+        margin: 0 24px 0 0;
+      }
+      .comment-input-field {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+      #comment-textarea:focus ~ .char-count {
+        opacity: 1;
+      }
+      .char-count {
+        opacity: 0;
+        position: absolute;
+        top: 100%;
+        transform: translateY(-100%);
+        right: 10px;
+        font-size: 12px;
+        color: #777;
+        text-align: right;
+        margin-top: 4px;
+      }
+      .submit-button {
+        background-color: #1266a7;
+        color: white;
+        font-weight: bold;
+        padding: 4px 14px;
+        border: none;
+        border-radius: 14px;
+        cursor: pointer;
+        transition: background 0.2s ease-in-out;
+      }
+
+      .submit-button:hover {
+        background-color: #005fa3;
       }
     </style>
   </head>
   <body>
     <%- include("./partials/navbar") %>
     <div class="container mt-4">
-      <div class="blog-container">
+      <div class="post-container">
         <img
           src="/<%= blog.coverImageURL %>"
           alt="Blog Image"
-          class="blog-image"
+          class="post-image"
         />
-        <h2 class="text-start blog-title"><%= blog.title %></h2>
-        <pre class="blog-body"><%= blog.body %></pre>
-        <p class="blog-author">
+        <h2 class="text-start post-title"><%= blog.title %></h2>
+        <pre class="post-content"><%= blog.body %></pre>
+        <p class="post-author">
           Created by
           <img src="<%= blog.createdBy.profileImageURL %>" alt="Author Image" />
           <span><%= blog.createdBy.fullName %></span>
         </p>
       </div>
+      <div class="container comment-container my-4">
+        <form action="/blog" method="POST" enctype="multipart/form-data">
+          <div class="mb-3">
+            <h3 class="comment-title">Leave a Comment</h3>
+            <div class="comment-input-field">
+              <label for="comment-textarea" class="required"
+                ><%= user.fullName %></label
+              >
+              <input
+                required
+                name="content"
+                type="text"
+                class="form-control"
+                id="comment-textarea"
+                placeholder="Enter your comment"
+                maxlength="300"
+                oninput="updateCharacterCount(this)"
+              />
+              <div class="char-count" id="charCount">0/300</div>
+            </div>
+          </div>
+
+          <div
+            class="d-flex align-items-start justify-content-start flex-column gap-3"
+          >
+            <div>
+              <button type="submit" class="submit-button">Submit</button>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
     <%- include("./partials/scripts") %>
+    <script>
+      function updateCharacterCount(input) {
+        const counter = document.getElementById('charCount');
+        counter.textContent = input.value.length + '/300';
+      }
+    </script>
   </body>
 </html>
