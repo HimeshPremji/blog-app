@@ -49,6 +49,29 @@
       .blog-author {
         font-family: Arial, Helvetica, sans-serif;
       }
+      .blog-author {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px;
+        font-size: 16px;
+        font-weight: 500;
+        color: #333;
+      }
+
+      .blog-author img {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #ddd;
+        padding: 2px;
+      }
+
+      .blog-author span {
+        font-weight: 600;
+        color: #444;
+      }
     </style>
   </head>
   <body>
@@ -62,7 +85,11 @@
         />
         <h2 class="text-start blog-title"><%= blog.title %></h2>
         <pre class="blog-body"><%= blog.body %></pre>
-        <p class="blog-author text-end">Created by <%= user.fullName %></p>
+        <p class="blog-author">
+          Created by
+          <img src="<%= blog.createdBy.profileImageURL %>" alt="Author Image" />
+          <span><%= blog.createdBy.fullName %></span>
+        </p>
       </div>
     </div>
     <%- include("./partials/scripts") %>

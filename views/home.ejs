@@ -49,6 +49,13 @@
         color: #333;
       }
 
+      .card-title {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+      }
+
       .card-text {
         color: #555;
         font-size: 0.95rem;
@@ -80,9 +87,9 @@
     <%- include('./partials/navbar') %>
     <div class="container mt-4">
       <h1 class="text-center mb-4">Latest Blogs</h1>
-      <div class="blog-container">
+      <div class="blog-container row">
         <% blogs.forEach(blog => { %>
-        <div class="card">
+        <div class="card col-2">
           <img
             src="/<%= blog.coverImageURL %>"
             class="card-img-top"
@@ -91,7 +98,12 @@
           <div class="card-body">
             <h5 class="card-title"><%= blog.title %></h5>
             <p class="card-text"><%= blog.body.substring(0, 100) %>...</p>
-            <a href="/blog/<%= blog.id %>" class="btn btn-primary">Read More</a>
+            <a
+              target="_blank"
+              href="/blog/<%= blog.id %>"
+              class="btn btn-primary btn-sm"
+              >Read more</a
+            >
           </div>
         </div>
         <% }) %>
