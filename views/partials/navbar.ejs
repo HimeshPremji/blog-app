@@ -14,11 +14,14 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <% if (locals.user) { %>
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
+          <a class="nav-link active" aria-current="page" href="/">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Add Blog</a>
+          <a class="nav-link active" aria-current="page" href="/blog/add-new"
+            >Add Blog</a
+          >
         </li>
         <li class="nav-item dropdown">
           <a
@@ -28,17 +31,20 @@
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            <%= fullName %>
+            <%= user.fullName %>
           </a>
           <ul class="dropdown-menu">
-            <% if (fullName && fullName == "Guest") { %>
-            <li><a class="dropdown-item" href="/user/signin">Login</a></li>
-            <li><a class="dropdown-item" href="/user/signup">Signup</a></li>
-            <% } else { %>
             <li><a class="dropdown-item" href="/user/logout">Logout</a></li>
-            <% } %>
           </ul>
         </li>
+        <% } else { %>
+        <li class="nav-item">
+          <a class="nav-link" href="/user/signup">Create Account</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/user/signin">Signin</a>
+        </li>
+        <% } %>
       </ul>
     </div>
   </div>

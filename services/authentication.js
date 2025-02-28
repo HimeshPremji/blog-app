@@ -13,32 +13,19 @@ function createTokenForUser(user) {
   return token;
 }
 
-function validateToken(token) {
-  const validatedToken = JWT.verify(token, SECRET);
-  return validatedToken;
-}
-
-function authenticateJWTforLocals(req, res, next) {
-  const token = req.cookies.token;
-  if (!token) {
-    res.locals.fullName = 'Guest';
-    return next();
-  }
+function checkforAuthenticationCookie(req, res, next) {
+  const cookieValue = req.cookies.token;
+  if (!cookieValue) return next();
 
   try {
-    const user = JWT.verify(token, SECRET);
-    req.user = user;
-    console.log('hehe', req.user);
+    const userPayload = JWT.verify(cookieValue, SECRET);
+    req.user = userPayload;
+  } catch (error) {}
 
-    res.locals.fullName = user.fullName;
-  } catch (error) {
-    res.locals.fullName = 'Guest';
-  }
-  next();
+  return next();
 }
 
 module.exports = {
-  authenticateJWTforLocals,
+  checkforAuthenticationCookie,
   createTokenForUser,
-  validateToken,
 };
