@@ -12,28 +12,91 @@
       rel="stylesheet"
     />
     <style>
-      body {
-        background-color: #f8f9fa;
+      /* Image Modal Styles */
+      .image-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
       }
+
+      .modal-image {
+        max-width: 90%;
+        max-height: 90%;
+        object-fit: contain;
+        border-radius: 4px;
+      }
+
+      .close-btn {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        top: 25px;
+        right: 70px;
+        color: white;
+        font-size: 40px;
+        font-weight: 300;
+        cursor: pointer;
+        transition: opacity 0.2s;
+      }
+
+      .close-btn:hover {
+        opacity: 0.8;
+      }
+      .close-btn p {
+        position: absolute;
+        left: 25px;
+        top: 11.4px;
+        font-size: 24px;
+      }
+
+      .container {
+        padding: 0 15px;
+      }
+
       .post-container {
         max-width: 1100px;
-        margin: auto;
+        margin: 20px auto;
         background: white;
         padding: 20px;
+        padding-bottom: 4px;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       }
+
       .post-title {
         text-align: center;
         color: #343a40;
+        font-size: 1.8rem;
+        margin: 20px 0;
       }
-      .post-image {
+
+      .post-images-container {
         width: 100%;
-        height: auto;
-        border-radius: 8px;
-        margin-bottom: 20px;
+        background: #050505;
+        background-size: cover;
+        display: flex;
+        justify-content: space-evenly;
       }
-      .post-author,
+
+      .post-image {
+        height: 320px;
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+
+      .post-image:hover {
+        transform: scale(1.01);
+      }
+
       .post-content {
         font-family: 'Lora', serif;
         background: #f4f4f4;
@@ -41,20 +104,19 @@
         border-radius: 8px;
         white-space: pre-wrap;
         word-wrap: break-word;
-        font-size: 16px;
-        line-height: 1.5;
+        font-size: 1rem;
+        line-height: 1.6;
       }
-      .post-author {
-        font-family: Arial, Helvetica, sans-serif;
-      }
+
       .post-author {
         display: flex;
         align-items: center;
         justify-content: flex-end;
         gap: 8px;
-        font-size: 16px;
+        font-size: 1rem;
         font-weight: 500;
         color: #333;
+        margin-top: 20px;
       }
 
       .post-author img {
@@ -71,104 +133,293 @@
         color: #444;
       }
 
-      /* Comment Section */
       .comment-container {
         max-width: 1100px;
+        margin: 40px auto;
       }
+
+      .comment-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 1px solid black;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .comment-avatar img {
+        font-size: 7px;
+        text-align: center;
+        width: 200%;
+        height: 200%;
+        object-fit: contain;
+        border-radius: 50%;
+      }
+
       .comment-input-field label {
         white-space: nowrap;
         margin: 0 24px 0 0;
       }
+
       .comment-input-field {
         position: relative;
-        display: flex;
-        align-items: center;
       }
-      #comment-textarea:focus ~ .char-count {
-        opacity: 1;
-      }
+
       .char-count {
-        opacity: 0;
+        opacity: 1;
         position: absolute;
-        top: 100%;
-        transform: translateY(-100%);
-        right: 10px;
+        top: 35px;
+        right: 100px;
         font-size: 12px;
         color: #777;
-        text-align: right;
-        margin-top: 4px;
+        transition: top 0.15s ease-in-out;
       }
+
+      #comment-textarea:focus ~ .char-count {
+        top: 8px;
+        transition: top 0.15s ease-in-out;
+        color: black;
+      }
+
       .submit-button {
         background-color: #1266a7;
         color: white;
         font-weight: bold;
         padding: 4px 14px;
-        border: none;
-        border-radius: 14px;
+        border: 1px solid #1266a7;
+        border-radius: 4px;
         cursor: pointer;
-        transition: background 0.2s ease-in-out;
+        border-left: none;
+        margin-left: -1px;
+        position: relative;
+        z-index: 1;
+        transition: all 0.2s ease-in-out;
       }
 
       .submit-button:hover {
         background-color: #005fa3;
       }
+
+      #comment-textarea:focus {
+        z-index: 2;
+        border-color: #1266a7;
+        box-shadow: -6px 0 10px -1px rgba(18, 102, 167, 0.5);
+      }
+
+      #comment-textarea {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        z-index: 2;
+      }
+
+      .d-flex > .submit-button {
+        margin-left: 0;
+        border-left: 1px solid transparent;
+      }
+
+      #comment-textarea:focus ~ .submit-button {
+        position: relative;
+      }
+
+      .submit-button {
+        z-index: 2;
+        transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        margin-left: -1px;
+        border-left: 1px solid transparent;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+
+      .card-text {
+        font-family: Arial, Helvetica, sans-serif;
+        line-height: 1;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        overflow: visible;
+      }
+
+      @media (max-width: 768px) {
+        .post-title {
+          font-size: 1.5rem;
+        }
+
+        .post-content {
+          font-size: 0.9rem;
+          padding: 10px;
+        }
+
+        .post-author {
+          font-size: 0.9rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .post-container {
+          padding: 15px;
+        }
+
+        .post-title {
+          font-size: 1.25rem;
+        }
+
+        .post-author {
+          flex-direction: row;
+          align-items: center;
+        }
+        .post-author img {
+          display: none;
+        }
+      }
     </style>
   </head>
+
   <body>
     <%- include("./partials/navbar") %>
-    <div class="container mt-4">
+
+    <div class="image-modal" id="imageModal">
+      <span class="close-btn" id="closeModal"
+        >&times;
+        <p>ESC</p>
+      </span>
+      <img class="modal-image" id="expandedImage" alt="Full screen preview" />
+    </div>
+
+    <div class="container">
       <div class="post-container">
-        <img
-          src="/<%= blog.coverImageURL %>"
-          alt="Blog Image"
-          class="post-image"
-        />
-        <h2 class="text-start post-title"><%= blog.title %></h2>
-        <pre class="post-content"><%= blog.body %></pre>
+        <h2 class="post-title"><%= blog.title %></h2>
+        <pre class="post-content">
+          <div class="post-images-container">
+            <img
+            src="/<%= blog.coverImageURL %>"
+            alt="Blog Image"
+            class="post-image"
+            id="blogImage"
+            />
+          </div>
+        <%= blog.body %></pre>
         <p class="post-author">
           Created by
           <img src="<%= blog.createdBy.profileImageURL %>" alt="Author Image" />
-          <span><%= blog.createdBy.fullName %></span>
+          <span> <%= blog.createdBy.fullName %> </span>
         </p>
       </div>
-      <div class="container comment-container my-4">
-        <form action="/blog" method="POST" enctype="multipart/form-data">
-          <div class="mb-3">
-            <h3 class="comment-title">Leave a Comment</h3>
-            <div class="comment-input-field">
-              <label for="comment-textarea" class="required"
-                ><%= user.fullName %></label
-              >
-              <input
-                required
-                name="content"
-                type="text"
-                class="form-control"
-                id="comment-textarea"
-                placeholder="Enter your comment"
-                maxlength="300"
-                oninput="updateCharacterCount(this)"
-              />
-              <div class="char-count" id="charCount">0/300</div>
-            </div>
-          </div>
 
-          <div
-            class="d-flex align-items-start justify-content-start flex-column gap-3"
-          >
-            <div>
-              <button type="submit" class="submit-button">Submit</button>
+      <!-- Coment seciton -->
+      <div class="comment-container my-5">
+        <h3 class="comments-title">Comments (<%= comments.length %>)</h3>
+
+        <% if (locals.user) { %>
+        <div class="comment-form-container">
+          <form action="/blog/comment/<%= blog._id %>" method="post">
+            <div class="mb-3">
+              <label class="form-label fw-bold"
+                >Comment as <%= user.fullName %></label
+              >
+              <div class="position-relative">
+                <textarea
+                  name="content"
+                  class="form-control mb-2"
+                  id="comment-textarea"
+                  rows="3"
+                  placeholder="Write your comment here..."
+                  maxlength="2000"
+                  oninput="updateCharacterCount(this)"
+                  style="resize: none"
+                ></textarea>
+                <div class="d-flex justify-content-between align-items-center">
+                  <small class="char-counter">
+                    <span id="charCount">0/2000</span> characters
+                  </small>
+                  <button type="submit" class="btn btn-primary">
+                    Post Comment
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <% } else { %>
+        <div class="alert alert-info">
+          Please <a href="/user/signin" class="alert-link">login</a> to leave a
+          comment
+        </div>
+        <% } %>
+
+        <div class="comments-list">
+          <% comments.forEach(comment => { %>
+          <div class="card comment-card mb-3">
+            <div class="card-body">
+              <div class="d-flex align-items-center mb-2">
+                <div class="comment-avatar">
+                  <img
+                    src="<%= comment.createdBy.profileImageURL %>"
+                    alt="<%= comment.createdBy.fullName %>"
+                  />
+                </div>
+                <div>
+                  <span class="comment-author ms-2"
+                    ><%= comment.createdBy.fullName %></span
+                  >
+                  <span class="comment-time">
+                    • <%= new Date(comment.createdAt).toLocaleDateString() %>
+                  </span>
+                </div>
+              </div>
+              <pre class="card-text"><%= comment.content %></pre>
             </div>
           </div>
-        </form>
+          <% }) %>
+        </div>
       </div>
     </div>
     <%- include("./partials/scripts") %>
     <script>
       function updateCharacterCount(input) {
         const counter = document.getElementById('charCount');
-        counter.textContent = input.value.length + '/300';
+        counter.textContent = input.value.length + '/2000';
       }
+      document.addEventListener('DOMContentLoaded', () => {
+        const textarea = document.getElementById('comment-textarea');
+        if (textarea) {
+          updateCharacterCount(textarea);
+        }
+      });
+      document.addEventListener('DOMContentLoaded', () => {
+        const blogImage = document.getElementById('blogImage');
+        const imageModal = document.getElementById('imageModal');
+        const expandedImage = document.getElementById('expandedImage');
+        const closeModal = document.getElementById('closeModal');
+
+        if (blogImage) {
+          blogImage.addEventListener('click', () => {
+            imageModal.style.display = 'flex';
+            expandedImage.src = blogImage.src;
+            document.body.style.overflow = 'hidden';
+          });
+        }
+
+        closeModal.addEventListener('click', () => {
+          imageModal.style.display = 'none';
+          document.body.style.overflow = 'auto';
+        });
+
+        imageModal.addEventListener('click', (e) => {
+          if (e.target === imageModal) {
+            imageModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+          }
+        });
+
+        // Close modal on ESC key
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && imageModal.style.display === 'flex') {
+            imageModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+          }
+        });
+      });
     </script>
   </body>
 </html>
