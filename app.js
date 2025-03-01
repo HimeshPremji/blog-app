@@ -1,17 +1,21 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
-const userRoute = require('./routes/user');
-const blogRoute = require('./routes/blog');
 const mongoose = require('mongoose');
-const { checkforAuthenticationCookie } = require('./services/authentication');
 const cookieParser = require('cookie-parser');
 const Blog = require('./models/blog');
 
+const userRoute = require('./routes/user');
+const blogRoute = require('./routes/blog');
+
+const { checkforAuthenticationCookie } = require('./services/authentication');
+
 const app = express();
-const PORT = 8000 || env.process.PORT;
+const PORT = process.env.PORT || 8000;
 
 mongoose
-  .connect('mongodb://localhost:27017/blogify')
+  // .connect('mongodb://localhost:27017/blogify')
+  .connect(process.env.MONGO_URL)
   .then((e) => console.log('MongoDB is conneected'));
 
 app.set('view engine', 'ejs');
